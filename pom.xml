@@ -79,6 +79,31 @@
                 <version>${junit.version}</version>
                 <scope>test</scope>
               </dependency>
+
+            <!--QUICK BOOKS -->
+      <!-- data jar -->
+      <dependency>
+          <groupId> com.intuit.quickbooks-online </groupId>
+          <artifactId> ipp-v3-java-data </artifactId>
+          <version> 6.0.7 </version>
+      </dependency>
+
+      <!-- devkit jar with dependencies-->
+      <dependency>
+          <groupId>com.intuit.quickbooks-online</groupId>
+          <artifactId>ipp-v3-java-devkit</artifactId>
+          <classifier>jar-with-dependencies</classifier>
+          <version> 6.0.7 </version>
+      </dependency>
+
+      <!-- oauth jar with dependencies-->
+      <dependency>
+          <groupId>com.intuit.quickbooks-online</groupId>
+          <artifactId>oauth2-platform-api</artifactId>
+          <classifier>jar-with-dependencies</classifier>
+          <version> 6.0.7 </version>
+      </dependency>
+
   </dependencies>
 
   <build>
