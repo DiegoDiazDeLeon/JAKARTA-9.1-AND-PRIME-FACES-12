@@ -1,21 +1,25 @@
 package com.prueba2.prueba2.quickbooks;
 
+import com.intuit.oauth2.config.Environment;
+import com.intuit.oauth2.config.OAuth2Config;
+import com.intuit.oauth2.config.Scope;
+import com.intuit.oauth2.exception.InvalidRequestException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
-
-import java.util.ArrayList;
-import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @Named
 @RequestScoped
-public class QuickController {
+public class ConnectController {
+
     private OAuth2Config oauth2Config;
 
     public void connectToQuickBooks() {
@@ -39,18 +43,17 @@ public class QuickController {
             List<Scope> scopes = new ArrayList<Scope>();
             scopes.add(Scope.Accounting);
 
-
-
             //prepare authorization url to intiate the oauth handshake
-            String authorizationUrl =oauth2Config.prepareUrl(scopes, redirectUri, csrf);
+            String authorizationUrl = oauth2Config.prepareUrl(scopes, redirectUri, csrf);
 
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
             externalContext.redirect(authorizationUrl);
-        } catch (IOException ex) {
+
+        } catch (IOException | InvalidRequestException ex) {
             ex.printStackTrace();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Failed to connect to QuickBooks: " + ex.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, message);
-        } catch (InvalidRequestException e) {
-            throw new RuntimeException(e);
         }
+    }
+
 }
