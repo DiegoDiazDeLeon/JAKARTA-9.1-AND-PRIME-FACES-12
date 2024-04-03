@@ -8,6 +8,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.IOException;
@@ -20,16 +21,15 @@ import java.util.Properties;
 @RequestScoped
 public class ConnectController {
 
+    @Inject
+    Credentials credentials;
     private OAuth2Config oauth2Config;
 
     public void connectToQuickBooks() {
         try {
-            Properties prop = new Properties();
-            InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties");
-            prop.load(input);
-            String clientId = prop.getProperty("OAuth2AppClientId");
-            String clientSecret = prop.getProperty("OAuth2AppClientSecret");
-            String redirectUri = prop.getProperty("OAuth2AppRedirectUri");
+            String clientId = credentials.getClientId();
+            String clientSecret = credentials.getClientSecret();
+            String redirectUri = credentials.getRedirectUri();
 
             //initialize the config
             oauth2Config = new OAuth2Config.OAuth2ConfigBuilder(clientId, clientSecret)
