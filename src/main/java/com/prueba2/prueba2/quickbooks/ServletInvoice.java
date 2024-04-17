@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intuit.ipp.core.IEntity;
 import com.intuit.ipp.data.*;
 import com.intuit.ipp.services.QueryResult;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import com.intuit.ipp.exception.FMSException;
 import com.intuit.ipp.services.DataService;
@@ -30,8 +32,19 @@ public class ServletInvoice extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response){
         //obtenemos de la sesion el REALMID
-        String realmId = (String) request.getSession().getAttribute("realmId");
-        String accessToken = (String)request.getSession().getAttribute("access_token");
+        HttpSession session = request.getSession();
+        String realmId = (String) session.getAttribute("realmId");
+        String accessToken = (String) session.getAttribute("access_token");
+        //String realmId = (String) request.getSession().getAttribute("realmId");
+        //String accessToken = (String)request.getSession().getAttribute("access_token");
+        if (StringUtils.isEmpty(realmId))
+        {
+            System.out.println("El realmId está vacío.");
+        }
+        if (StringUtils.isEmpty(accessToken))
+        {
+            System.out.println("El acces está vacío.");
+        }
         try {
             //get DataService
             DataService service = helper.getDataService(realmId, accessToken);
@@ -56,8 +69,9 @@ public class ServletInvoice extends HttpServlet {
 
             //return response back
             String jsonResponse = createResponse(savedPayment);
+            System.out.println(jsonResponse);
 
-            request.getSession().setAttribute("jsonResponse", jsonResponse);
+            //request.getSession().setAttribute("jsonResponse", jsonResponse);
             response.sendRedirect(request.getContextPath() + "/connectOK.xhtml");
 
         } catch (FMSException e) {

@@ -41,6 +41,8 @@ public class ServletCallBack extends HttpServlet {
             BearerTokenResponse bearerTokenResponse = client.retrieveBearerTokens(authCode, redirectUri);
 
             // Almacenar los tokens en la sesión
+            request.getSession().setAttribute("realmId",realmId);
+            request.getSession().setAttribute("code",authCode);
             request.getSession().setAttribute("access_token", bearerTokenResponse.getAccessToken());
             request.getSession().setAttribute("refresh_token", bearerTokenResponse.getRefreshToken());
 
